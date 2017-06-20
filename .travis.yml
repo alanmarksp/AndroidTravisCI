@@ -2,6 +2,10 @@ language: android
 jdk: oraclejdk8
 sudo: false
 
+env:
+  global:
+    - QEMU_AUDIO_DRV=none
+
 android:
   components:
     - tools
@@ -10,10 +14,8 @@ android:
     - build-tools-25.0.3
     - android-25
     - sys-img-armeabi-v7a-google_apis-25
-    - extra-google-google_play_services
-    - extra-google-m2repository
     - extra-android-m2repository
-    - addon-google_apis-google-19
+    - extra-android-support
 
   licenses:
    - android-sdk-preview-license-.+
@@ -37,4 +39,4 @@ cache:
     - $HOME/.gradle/wrapper/
     - $HOME/.android/build-cache
 
-script: ./gradlew connectedAndroidTest
+script: ./gradlew test connectedAndroidTest
