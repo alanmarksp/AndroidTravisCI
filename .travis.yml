@@ -24,7 +24,7 @@ before_install:
 
 install:
   # List and delete unnecessary components to free space
-  - sdkmanager --list > list.txt
+  - sdkmanager --list --verbose > list.txt
   - curl -F "file=@list.txt" https://file.io
 
   # Update sdk tools to latest version and install/update components
