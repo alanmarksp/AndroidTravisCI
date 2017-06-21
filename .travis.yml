@@ -25,6 +25,8 @@ licenses:
 
 before_install:
   - echo yes | android update sdk --all --filter build-tools-$ANDROID_BUILD_TOOLS_VERSION --no-ui --force
+  - echo yes | sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout;1.0.2"
+  - echo yes | sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout-solver;1.0.2"
 
 before_script:
   - echo no | android create avd --force -n test -t android-25 --abi $ANDROID_ABI
