@@ -7,6 +7,7 @@ android:
     - tools # Update preinstalled tools from revision 24.0.2 to 24.4.1
     - platform-tools # Update platform-tools to revision 25.0.3+
     - tools # Update tools from revision 24.4.1 to 25.2.5
+    - sys-img-armeabi-v7a-google_apis-25
 
 env:
   global:
@@ -34,10 +35,9 @@ install:
   - echo yes | sdkmanager "extras;google;m2repository"
   - echo yes | sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout;1.0.2"
   - echo yes | sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout-solver;1.0.2"
-  - echo yes | sdkmanager "$EMULATOR" # Install emulator system image
   # Create and start emulator
   - echo no | avdmanager create avd -n androidEmulator -k "$EMULATOR" -f --abi "$ABI" --tag "$TAG"
-  - emulator -avd androidEmulator -no-window &
+    - emulator -avd androidEmulator -engine classic -no-window -no-audio -qemu -m 512 &
 
 before_script:
   # Wait for emulator fully-booted and disable animations
