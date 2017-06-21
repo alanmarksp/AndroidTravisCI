@@ -40,7 +40,7 @@ install:
   - echo yes | sdkmanager "$EMULATOR" # Install emulator system image
   # Create and start emulator
   - echo no | avdmanager create avd -n androidEmulator -k "$EMULATOR" -f --abi "$ABI" --tag "$TAG"
-  - emulator -avd androidEmulator -no-window -no-audio &
+  - emulator -avd androidEmulator -no-window -no-audio -qemu &
 
 before_script:
   # Wait for emulator fully-booted and disable animations
