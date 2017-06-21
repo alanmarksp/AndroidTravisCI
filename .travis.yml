@@ -1,52 +1,54 @@
-language: android
-jdk: oraclejdk8
-sudo: required
+Skip to content
+This repository
+Search
+Pull requests
+Issues
+Marketplace
+Gist
+ @alanmarksp
+ Sign out
+ Watch 31
+  Star 751
+ Fork 116 thyrlian/AwesomeValidation
+ Code  Issues 4  Pull requests 0  Projects 0  Wiki Insights 
+Branch: master Find file Copy pathAwesomeValidation/.travis.yml
+755f004  4 days ago
+@thyrlian thyrlian Update Travis config
+2 contributors @thyrlian @nisrulz
+RawBlameHistory    
+35 lines (27 sloc)  774 Bytes
+sudo: false
 
-android:
-  components: # Cookbooks version: https://github.com/travis-ci/travis-cookbooks/tree/9c6cd11
-    - tools # Update preinstalled tools from revision 24.0.2 to 24.4.1
-    - platform-tools # Update platform-tools to revision 25.0.3+
-    - tools # Update tools from revision 24.4.1 to 25.2.5
+language: android
+
+jdk: oraclejdk8
 
 env:
   global:
-    - API=25 # Android API level 25 by default
-    - TAG=google_apis # Google APIs by default, alternatively use default
-    - ABI=armeabi-v7a # ARM ABI v7a by default
-    - QEMU_AUDIO_DRV=none # Disable emulator audio to avoid warning
-    - ADB_INSTALL_TIMEOUT=20 # minutes (2 minutes by default)
-    - TOOLS=${ANDROID_HOME}/tools # PATH order matters, exists more than one emulator script
-    - PATH=${ANDROID_HOME}:${ANDROID_HOME}/emulator:${TOOLS}:${TOOLS}/bin:${ANDROID_HOME}/platform-tools:${PATH}
-    - ADB_INSTALL_TIMEOUT=20 # minutes (2 minutes by default)
+    - ANDROID_TARGET=android-25
+    - ANDROID_BUILD_TOOLS_VERSION=25.0.3
+    - ANDROID_ABI=armeabi-v7a
+
+android:
+  components:
+    - tools
+    - build-tools-$ANDROID_BUILD_TOOLS_VERSION
+    - $ANDROID_TARGET
+    - extra-google-google_play_services
+    - extra-android-support
+    - extra
+
+licenses:
+  - 'android-sdk-license-.+'
 
 before_install:
-  - export EMULATOR="system-images;android-${API};${TAG};${ABI}" # Used to install/create emulator
-  - echo 'count=0' > /home/travis/.android/repositories.cfg # Avoid warning
-
-install:
-  # List and delete unnecessary components to free space
-  - sdkmanager --list || true
-
-  # Update sdk tools to latest version and install/update components
-  - echo yes | sdkmanager "tools"
-  - echo yes | sdkmanager "platforms;android-25" # Latest platform required by SDK tools
-  - echo yes | sdkmanager "platforms;android-${API}" # Android platform required by emulator
-  - echo yes | sdkmanager "extras;android;m2repository"
-  - echo yes | sdkmanager "extras;google;m2repository"
-  - echo yes | sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout;1.0.2"
-  - echo yes | sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout-solver;1.0.2"
-  - echo yes | sdkmanager "$EMULATOR" # Install emulator system image
-  # Create and start emulator
-  - echo no | avdmanager create avd -n androidEmulator -k "$EMULATOR" -f --abi "$ABI" --tag "$TAG"
-  - emulator -avd androidEmulator -engine classic -no-window -no-audio -qemu -m 512 &
+  - echo yes | android update sdk --all --filter build-tools-$ANDROID_BUILD_TOOLS_VERSION --no-ui --force
 
 before_script:
-  # Wait for emulator fully-booted and disable animations
+  - echo no | android create avd --force -n test -t android-19 --abi $ANDROID_ABI
+  - emulator -avd test -no-window &
   - android-wait-for-emulator
-  - adb shell settings put global window_animation_scale 0 &
-  - adb shell settings put global transition_animation_scale 0 &
-  - adb shell settings put global animator_duration_scale 0 &
   - adb shell input keyevent 82 &
 
 script:
-  - ./gradlew build connectedCheck
+  - ./gradlew connectedAndroidTest
