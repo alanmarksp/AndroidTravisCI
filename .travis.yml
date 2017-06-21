@@ -1,22 +1,4 @@
-Skip to content
-This repository
-Search
-Pull requests
-Issues
-Marketplace
-Gist
- @alanmarksp
- Sign out
- Watch 31
-  Star 751
- Fork 116 thyrlian/AwesomeValidation
- Code  Issues 4  Pull requests 0  Projects 0  Wiki Insights 
-Branch: master Find file Copy pathAwesomeValidation/.travis.yml
-755f004  4 days ago
-@thyrlian thyrlian Update Travis config
-2 contributors @thyrlian @nisrulz
-RawBlameHistory    
-35 lines (27 sloc)  774 Bytes
+
 sudo: false
 
 language: android
