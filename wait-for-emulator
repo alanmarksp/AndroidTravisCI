@@ -6,5 +6,5 @@ A=$(adb shell getprop sys.boot_completed | tr -d '\r')
 while [ "$A" != "1" ]; do
     echo "Waiting for emulator"
     sleep 5
-    A=$(adb -s androidEmulator shell getprop sys.boot_completed | tr -d '\r')
+    A=$(adb shell getprop sys.boot_completed | tr -d '\r')
 done
