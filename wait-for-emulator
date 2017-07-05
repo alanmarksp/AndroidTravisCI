@@ -1,4 +1,7 @@
 #!/bin/bash
+
+set -ev
+
 adb wait-for-device
 
 A=$(adb shell getprop sys.boot_completed | tr -d '\r')
