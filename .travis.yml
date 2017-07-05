@@ -10,7 +10,7 @@ android:
 
 env:
   global:
-    - API=19 # Android API level 25 by default
+    - API=25 # Android API level 25 by default
     - TAG=google_apis # Google APIs by default, alternatively use default
     - ABI=armeabi-v7a # ARM ABI v7a by default
     - QEMU_AUDIO_DRV=none # Disable emulator audio to avoid warning
@@ -34,7 +34,7 @@ install:
   - echo yes | sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout-solver;1.0.2"
   - echo yes | sdkmanager "$EMULATOR" # Install emulator system image
   # Create and start emulator
-  - echo no | avdmanager create avd -n androidEmulator -k "$EMULATOR" -f --abi "$ABI" --tag "$TAG"
+  - echo no | avdmanager create avd -n androidEmulator -k "$EMULATOR" -f --abi "$ABI" --tag "$TAG" --device "Nexus 5" --sdcard 128M
   - emulator -avd androidEmulator -engine classic -no-window -no-audio -qemu -m 512 &
 
 before_script:
