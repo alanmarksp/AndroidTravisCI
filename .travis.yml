@@ -42,7 +42,7 @@ install:
   - emulator -avd androidEmulator -engine classic -no-audio -no-window -qemu -m 512 &
 before_script:
   # Wait for emulator fully-booted and disable animations
-  - wait-for-emulator
+  - ./wait-for-emulator
   - adb shell settings put global window_animation_scale 0
   - adb shell settings put global transition_animation_scale 0
   - adb shell settings put global animator_duration_scale 0
