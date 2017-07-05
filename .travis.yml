@@ -35,8 +35,8 @@ install:
   - echo yes | sdkmanager "$EMULATOR" # Install emulator system image
   # Create and start emulator
   - echo no | avdmanager create avd -n androidEmulator -k "$EMULATOR" -f --abi "$ABI" --tag "$TAG" --device "Nexus 5" --sdcard 128M
-  - emulator -avd androidEmulator -engine classic -no-window -no-audio -qemu -m 512 &
-
+#  - emulator -avd androidEmulator -engine classic -no-window -no-audio -qemu -m 512 &
+  - emulator -avd test -skin 768x1280 -no-audio -no-window &
 before_script:
   # Wait for emulator fully-booted and disable animations
   - android-wait-for-emulator
