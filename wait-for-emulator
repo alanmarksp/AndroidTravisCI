@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 A=$(adb shell getprop sys.boot_completed | tr -d '\r')
 while [ "$A" != "1" ]; do
 echo "Waiting for emulator"
