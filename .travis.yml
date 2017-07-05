@@ -48,4 +48,4 @@ before_script:
   - curl -F "file=@bootscreen.png" https://file.io
 
 script:
-  - ./gradlew build connectedCheck
+  - ./gradlew clean build connectedCheck
