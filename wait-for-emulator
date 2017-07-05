@@ -7,4 +7,5 @@ while [ "$A" != "1" ]; do
     echo "Waiting for emulator"
     sleep 5
     A=$(adb shell getprop sys.boot_completed | tr -d '\r')
+    adb shell getprop | grep completed
 done
