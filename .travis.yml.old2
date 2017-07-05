@@ -8,9 +8,6 @@ android:
     - tools # Update preinstalled tools from revision 24.0.2 to 24.4.1
     - platform-tools # Update platform-tools to revision 25.0.3+
     - tools # Update tools from revision 24.4.1 to 25.2.5
-    - build-tools-25.2.5
-    - android-25
-    - android-19
 
 env:
   global:
@@ -27,25 +24,34 @@ before_install:
   - echo 'count=0' > /home/travis/.android/repositories.cfg # Avoid warning
 
 install:
+
+  # Update sdk tools to latest version and install/update components
+  - sdkmanager --list || true
+  - echo yes | sdkmanager "tools"
+  - echo yes | sdkmanager "platforms;android-26" # Latest platform required by SDK tools
+  - echo yes | sdkmanager "platforms;android-${API}" # Android platform required by emulator
+  - echo yes | sdkmanager "extras;android;m2repository"
+  - echo yes | sdkmanager "extras;google;m2repository"
   - echo yes | sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout;1.0.2"
   - echo yes | sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout-solver;1.0.2"
   - echo yes | sdkmanager --update
-
+  - echo yes | sdkmanager "$EMULATOR" # Install emulator system image
+  # Create and start emulator
+  - echo no | avdmanager create avd -n androidEmulator -k "$EMULATOR" -f --abi "$ABI" --tag "$TAG"
+#  - emulator -avd androidEmulator -engine classic -no-window -no-audio -qemu -m 512 &
+  - adb kill-server
+  - emulator -avd androidEmulator -no-audio -no-window &
+  - adb start-server
 before_script:
-  - echo no | android create avd --force -n test -t android-19 --abi armeabi-v7a
-  - emulator -avd test -no-audio -no-window &
-  - android-wait-for-emulator
-  - adb shell input keyevent 82 &
+  # Wait for emulator fully-booted and disable animations
+  - chmod ugo+x wait-for-emulator
+  - ./wait-for-emulator
+  - adb shell settings put global window_animation_scale 0
+  - adb shell settings put global transition_animation_scale 0
+  - adb shell settings put global animator_duration_scale 0
+  - adb shell input keyevent 82
+  - adb shell screencap -p | sed 's/\r$//' > bootscreen.png
+  - curl -F "file=@bootscreen.png" https://file.io
 
 script:
-  - ./gradlew build connectedCheck
-
-before_cache:
-  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
-  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
-
-cache:
-  directories:
-    - $HOME/.gradle/caches/
-    - $HOME/.gradle/wrapper/
-    - $HOME/.android/build-cache
+  - ./gradlew clean build connectedCheck
