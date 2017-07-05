@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -ev
-
 adb wait-for-device
 
 A=$(adb shell getprop init.svc.bootanim | tr -d '\r')
