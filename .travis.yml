@@ -32,7 +32,7 @@ install:
   - echo yes | sdkmanager --update
 
 before_script:
-  - echo no | avdmanager create avd -n androidEmulator -k "system-images;android-25;${TAG};${ABI}" -f --abi "$ABI" --tag "$TAG"
+  - echo no | avdmanager create avd -n test -k "system-images;android-25;${TAG};${ABI}" -f --abi "$ABI" --tag "$TAG"
   - echo no | android create avd --force -n test -t android-25 --abi armeabi-v7a
   - emulator -avd test -no-audio -no-window &
   - android-wait-for-emulator
