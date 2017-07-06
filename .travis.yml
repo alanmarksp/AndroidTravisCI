@@ -33,7 +33,7 @@ install:
   - echo yes | sdkmanager --update
 
 before_script:
-  - echo no | avdmanager create avd -n test -k "system-images;android-10;${TAG};${ABI}" -f --abi "$ABI" --tag "$TAG"
+  - echo no | avdmanager create avd -n test -k "system-images;android-19;${TAG};${ABI}" -f --abi "$ABI" --tag "$TAG"
   - emulator -avd test -no-audio -no-window &
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
