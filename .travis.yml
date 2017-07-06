@@ -8,9 +8,10 @@ android:
     - tools # Update preinstalled tools from revision 24.0.2 to 24.4.1
     - platform-tools # Update platform-tools to revision 25.0.3+
     - tools # Update tools from revision 24.4.1 to 25.2.5
-    - build-tools-25.2.5
-    - android-25
-    - sys-img-armeabi-v7a-google_apis-25
+    - build-tools-26.0.0
+    - android-26
+    - android-19
+    - sys-img-armeabi-v7a-google_apis-19
 
 env:
   global:
@@ -32,7 +33,7 @@ install:
   - echo yes | sdkmanager --update
 
 before_script:
-  - echo no | avdmanager create avd -n test -k "system-images;android-25;${TAG};${ABI}" -f --abi "$ABI" --tag "$TAG"
+  - echo no | avdmanager create avd -n test -k "system-images;android-10;${TAG};${ABI}" -f --abi "$ABI" --tag "$TAG"
   - emulator -avd test -no-audio -no-window &
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
