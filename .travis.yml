@@ -2,6 +2,7 @@ language: android
 jdk: oraclejdk8
 sudo: required
 dist: trusty
+group: deprecated-2017Q2
 
 android:
   components: # Cookbooks version: https://github.com/travis-ci/travis-cookbooks/tree/9c6cd11
