@@ -1,31 +1,36 @@
 language: android
 jdk: oraclejdk8
 sudo: required
-group: deprecated-2017Q2
-
-android:
-  components: # Cookbooks version: https://github.com/travis-ci/travis-cookbooks/tree/9c6cd11
-    - tools # Update preinstalled tools from revision 24.0.2 to 24.4.1
-    - platform-tools # Update platform-tools to revision 25.0.3+
-    - tools # Update tools from revision 24.4.1 to 25.2.5
-    - build-tools-26.0.0
-    - android-26
-    - android-19
-    - sys-img-armeabi-v7a-google_apis-19
+dist: trusty
 
 env:
   global:
-    - API=19 # Android API level 25 by default
-    - TAG=google_apis # Google APIs by default, alternatively use default
-    - ABI=armeabi-v7a # ARM ABI v7a by default
-    - QEMU_AUDIO_DRV=none # Disable emulator audio to avoid warning
-#    - ADB_INSTALL_TIMEOUT=20 # minutes (2 minutes by default)
-    - TOOLS=${ANDROID_HOME}/tools # PATH order matters, exists more than one emulator script
+    - API=android-19
+    - TAG=google_apis
+    - ABI=armeabi-v7a
+    - QEMU_AUDIO_DRV=none
+    - ADB_INSTALL_TIMEOUT=20
+    - TOOLS=${ANDROID_HOME}/tools
     - PATH=${ANDROID_HOME}:${ANDROID_HOME}/emulator:${TOOLS}:${TOOLS}/bin:${ANDROID_HOME}/platform-tools:${PATH}
 
+branches:
+  only:
+    - master
+    - develop
+
+android:
+  components:
+    - tools
+    - platform-tools
+    - tools
+    - build-tools-26.0.0
+    - android-26
+    - android-${API}
+    - sys-img-{ABI}-${TAG}-${API}
+
 before_install:
-  - export EMULATOR="system-images;android-${API};${TAG};${ABI}" # Used to install/create emulator
-  - echo 'count=0' > /home/travis/.android/repositories.cfg # Avoid warning
+  - export EMULATOR="system-images;android-${API};${TAG};${ABI}"
+  - echo 'count=0' > /home/travis/.android/repositories.cfg
 
 install:
   - echo yes | sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout;1.0.2"
@@ -33,7 +38,7 @@ install:
   - echo yes | sdkmanager --update
 
 before_script:
-  - echo no | avdmanager create avd -n test -k "system-images;android-19;${TAG};${ABI}" -f --abi "$ABI" --tag "$TAG"
+  - echo no | avdmanager create avd -f -n test -k "$EMULATOR" --abi "$ABI" --tag "$TAG"
   - emulator -avd test -no-audio -no-window &
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
