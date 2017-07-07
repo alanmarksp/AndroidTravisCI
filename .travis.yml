@@ -5,7 +5,7 @@ dist: trusty
 
 env:
   global:
-    - API=android-19
+    - API=19
     - TAG=google_apis
     - ABI=armeabi-v7a
     - QEMU_AUDIO_DRV=none
