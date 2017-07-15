@@ -5,7 +5,7 @@ dist: trusty
 
 env:
   global:
-    - API=19
+    - API=24
     - TAG=default
 #    - TAG=google_apis
     - ABI=armeabi-v7a
